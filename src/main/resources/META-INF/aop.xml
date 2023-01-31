@@ -1,0 +1,9 @@
+<aspectj>
+    <aspects>
+        <aspect name="ttw.springbe.method.execution.time.LoggingAspect"/>
+        <weaver options="-verbose -showWeaveInfo">
+            <include within="ttw.springbe.method.execution.time.*"/>
+            <include within="ttw.springbe.method.execution.time.services.*"/>
+        </weaver>
+    </aspects>
+</aspectj>
