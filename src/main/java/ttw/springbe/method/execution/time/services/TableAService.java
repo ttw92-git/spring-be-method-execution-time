@@ -9,9 +9,13 @@ public class TableAService {
     @Autowired
     private TableBService tableBService;
 
+    @Autowired
+    private TableCService tableCService;
+
     public void getAll() {
         this.doNothingA();
         tableBService.doNothingB();
+        tableCService.doNothingC();
     }
 
     public int doNothingA() {
