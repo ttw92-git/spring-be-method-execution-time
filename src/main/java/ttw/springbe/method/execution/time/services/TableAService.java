@@ -13,6 +13,7 @@ public class TableAService {
     private TableCService tableCService;
 
     public void getAll() {
+//        int a = Integer.getInteger("a");
         this.doNothingA();
         tableBService.doNothingB();
         tableCService.doNothingC();
@@ -24,6 +25,11 @@ public class TableAService {
     }
 
     public int doNothingA2() {
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+
+        }
         return 1;
     }
 }
