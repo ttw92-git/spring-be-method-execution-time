@@ -13,7 +13,7 @@ public class TableAService {
     private TableCService tableCService;
 
     public void getAll() {
-//        int a = Integer.getInteger("a");
+        int a = Integer.getInteger("a");
         this.doNothingA();
         tableBService.doNothingB();
         tableCService.doNothingC();

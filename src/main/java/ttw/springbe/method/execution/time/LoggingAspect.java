@@ -3,13 +3,11 @@ package ttw.springbe.method.execution.time;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.util.StopWatch;
 
 import java.util.Properties;
 
@@ -23,25 +21,12 @@ public class LoggingAspect {
         Object result = null;
 
         if (isLoggingExecutionTimeEnabled()) {
-            try {
-                MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-
-                //Get intercepted method details
-                String className = methodSignature.getDeclaringType().getSimpleName();
-                String methodName = methodSignature.getName();
-
-                final StopWatch stopWatch = new StopWatch();
-
-                //Measure method execution time
-                stopWatch.start();
-                result = proceedingJoinPoint.proceed();
-                stopWatch.stop();
-
-                //Log method execution time
-                log.info("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+            ExecutionTimeStopWatch executionTimeStopwatch = new ExecutionTimeStopWatch();
+            executionTimeStopwatch.startStopWatch(proceedingJoinPoint);
+            result = proceedingJoinPoint.proceed();
+            executionTimeStopwatch.stopStopWatch();
+        } else {
+            result = proceedingJoinPoint.proceed();
         }
         return result;
     }
@@ -55,7 +40,7 @@ public class LoggingAspect {
                 isLoggingExecutionTimeEnabled = true;
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.error("Gagal read logging.execution.time", e);
         }
         return isLoggingExecutionTimeEnabled;
     }
