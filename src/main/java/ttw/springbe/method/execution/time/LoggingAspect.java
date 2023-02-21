@@ -33,15 +33,30 @@ public class LoggingAspect {
 
     private boolean isLoggingExecutionTimeEnabled() {
         boolean isLoggingExecutionTimeEnabled = false;
-        try {
-            Resource resource = new ClassPathResource("application.properties");
-            Properties props = PropertiesLoaderUtils.loadProperties(resource);
-            if ("enabled".equalsIgnoreCase(props.getProperty("logging.execution.time"))) {
-                isLoggingExecutionTimeEnabled = true;
-            }
-        } catch (Exception e) {
-            log.error("Gagal read logging.execution.time", e);
+        if ("true".equalsIgnoreCase(getPropertiesValueByName("logging.execution.time.enabled"))) {
+            isLoggingExecutionTimeEnabled = true;
         }
         return isLoggingExecutionTimeEnabled;
+    }
+
+    private String getPropertiesValueByName(String propertiesName) {
+        String propertiesValue = "";
+
+        try {
+            String propertiesAddressInOpenshift = "file:///config/application.properties";
+            Resource resource = new ClassPathResource(propertiesAddressInOpenshift);
+
+            if (!resource.exists()) {
+                resource = new ClassPathResource("application.properties");
+                log.debug("Properties in " + propertiesAddressInOpenshift + " not found, read default properties");
+            }
+            Properties props = PropertiesLoaderUtils.loadProperties(resource);
+            propertiesValue = props.getProperty(propertiesName);
+            log.debug("Value for " + propertiesName + " is " + propertiesValue);
+        } catch (Exception e) {
+            log.debug("Gagal read properties, return empty string", e);
+        }
+
+        return propertiesValue;
     }
 }

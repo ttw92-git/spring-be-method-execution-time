@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<root level="ALL">
+		<appender name="nojsonLogger" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+<!--				<Pattern>-->
+<!--					%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36}.%M - %green(%msg{full}%n)-->
+<!--				</Pattern>-->
+				<Pattern>
+					%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36}.%M - %m%n%rEx{
+						full,
+						org.aspectj,
+						ttw.springbe.method.execution.time.LoggingAspect
+					}
+				</Pattern>
+			</encoder>
+		</appender>
+	</root>
+</configuration>
